@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+    <head>
+        <title>{{ page.title }}</title>
+        
+        <link href="/css/open-sans.css" rel="stylesheet" type="text/css" />
+        <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="/css/pure-min.css" rel="stylesheet" type="text/css" />
+        <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+
+        <script src="/js/anchor.min.js"></script>
+        <script src="/js/toc.js"></script>
+
+        <meta charset='utf-8'>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    </head>
+    <body>
+        <div id="show-toc" onclick=""><div onclick="">Table of Contents</div></div>
+        <div id="toc-popup" style="display: none"><div onclick="">
+            <h2>Table of Contents</h2>
+            <div onclick="" id="table-of-contents"></div>
+        </div></div>
+
+            <div id="nav"><div>
+                <nav>
+                    <a href="https://wooooms.ircdocs.horse/" title="wall of outdated or otherwise misleading specs">wooooms</a>
+                    <a href="https://ircdocs.horse/specs/" title="ircdocs.horse">ircdocs</a>
+                    <a href="https://modern.ircdocs.horse/" title="Modern IRC Specs">modern</a>
+                    <a href="http://ircv3.net" title="IRCv3">ircv3</a>
+                </nav>
+            </div></div>
+        <div id="wrapper">
+            <div id="content">
+                <h1>{{ page.title }}</h1>
+
+                <div id="spec">
+                    {{ content }}
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <hr/>
+            <p>The canonical version of this document is hosted at <a href="https://wooooms.ircdocs.horse/">https://wooooms.ircdocs.horse</a></p>
+            <p>You can talk to us at <a href="ircs://irc.freenode.net:6697/#ircdocs">#ircdocs on Freenode</a></p>
+            <p>Pull requests may be submitted to and the source code for it can be found at<br/><a href="https://github.com/ircdocs/wooooms">http://github.com/ircdocs/wooooms</a></p>
+        </div>
+    </body>
+    <script>
+        anchors.options = {
+            placement: 'right',
+            class: 'anchor',
+        };
+        anchors.add('#spec h1, #spec h2, #spec h3, #spec h4, #spec h5, #spec .figure');
+    </script>
+</html>

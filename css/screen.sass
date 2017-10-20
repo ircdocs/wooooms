@@ -1,0 +1,471 @@
+---
+---
+
+// variables
+//
+$spec-width: 57rem
+$desktop-width: 57rem
+$mobile-width: 30rem
+$standard_font_family: "Open Sans", sans-serif
+$content_font_family: "Open Sans", sans-serif
+$mono_font_family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace
+
+// Media queries
+//
+@mixin respond-to($media)
+    @if $media == wide
+        @media only screen and (min-width: $desktop-width)
+            @content
+    @else if $media == desktop
+        @media only screen and (min-width: $mobile-width) and (max-width: $desktop-width)
+            @content
+    @else if $media == mobile
+        @media only screen and (max-width: $mobile-width)
+            @content
+
+// styling
+//
+html
+    box-sizing: border-box
+*, *:before, *:after
+    box-sizing: inherit
+
+// table stuff
+html, body
+    font-family: $standard_font_family
+    height: 100%
+
+#wrapper, #footer
+    @media screen
+        max-width: $spec-width
+        margin: 0 auto
+    @media print
+        width: 100%
+    padding: 1rem
+
+@media screen
+    #wrapper
+        padding-bottom: 0
+    #footer
+        padding-top: 0
+        padding-bottom: 2.5rem  // for ToC button
+
+#nav
+    width: 100%
+    background: #334
+    color: #f7f7fa
+    @media print
+        display: none
+    > div
+        @include respond-to(wide)
+            max-width: $desktop-width - 2rem
+            margin: 0 auto
+            padding: 0.25rem 0 0.2rem
+        @include respond-to(desktop)
+            margin: 0 1rem
+            padding: 0.25rem 0 0.2rem
+        @include respond-to(mobile)
+            padding: 0.25rem 0.3rem 0.2rem
+        a
+            text-decoration: none
+            color: #e7e7ff
+            &:hover
+                color: #ccf
+
+        nav > a
+            margin-left: 1.5rem
+            &:first-child
+                margin-left: 0
+                @include respond-to(wide)
+                    margin-right: 2.75rem
+                @include respond-to(desktop)
+                    margin-right: 2.75rem
+                @include respond-to(mobile)
+                    display: block
+            @include respond-to(mobile)
+                &:nth-child(2)
+                    margin-left: 0
+            i
+                font-size: 0.9rem
+                vertical-align: baseline
+
+        .wordmark
+            font-style: normal
+
+#content > h1:first-child
+    margin: 2rem 0 3rem
+    text-align: center
+
+#spec
+    h1
+        page-break-before: always
+
+#toc-popup
+    background: rgba(20,20,20,0.75)
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    overflow-y: scroll
+    -webkit-overflow-scrolling: touch
+    > div
+        max-width: calc(100% - 2rem)
+        width: 40rem
+        background: #fbfbfb
+        margin: 1rem auto
+        padding: 1.5rem 1.85rem
+        border-radius: 1.5rem
+        > h2
+            margin-top: 0
+    #table-of-contents
+        li
+            margin-top: 0.3rem
+#show-toc
+    @media print
+        display: none
+    position: fixed
+    bottom: 0
+    left: 0
+    width: 100%
+    pointer-events: none
+    > div
+        display: block
+        margin: 0 auto
+        height: 2.5rem
+        max-width: 16rem
+        padding: 0.75rem
+        background: rgba(255, 255, 255, 0.925)
+        border: 0.1rem solid #2b2b2b
+        border-bottom: none
+        border-radius: 1rem 1rem 0 0
+        cursor: pointer
+        text-align: center
+        pointer-events: all
+
+.copyright .line
+    display: block
+    color: #222
+
+a
+    transition: color 0.2s
+    font-style: italic
+    text-decoration: none
+    &:visited, &:active
+        color: #9141d2
+
+h1
+    color: #334
+    .subtitle
+        display: block
+        font-size: 1.2rem
+        color: #445
+        font-weight: normal
+h2
+    color: #3e3e4e
+    margin-bottom: 1rem
+h3
+    color: #445
+    margin-bottom: 0.5rem
+h4
+    color: #4e4e5e
+    margin-bottom: 0.65rem
+
+h1, h2, h3, h4
+    page-break-after: avoid
+    a
+        color: #33a
+        &:hover
+            color: #119
+
+p
+    margin-top: 0.5rem
+    + p
+        margin-top: 1rem
+
+li
+    + li
+        margin-top: 0.9rem
+    p
+        &:first-child
+            margin-top: 0
+        &:last-child
+            margin-bottom: 0
+
+.warning, .note
+    color: #fff
+    border-radius: 1rem
+    margin: 1.55rem auto
+    padding: 1.2rem 1.3rem
+    a
+        color: #abf
+        @media print
+            color: #fff
+        &:hover
+            color: #78c
+    p
+        &:first-child
+            margin-top: 0
+        &:last-child
+            margin-bottom: 0
+.note
+    @media screen
+        background: #4f5dc9
+    @media print
+        background: #444
+        border: 0.5rem #222 dotted
+.warning
+    @media screen
+        background: #d54
+    @media print
+        background: #666
+        border: 0.5rem #000 dashed
+
+.anchor
+    color: #f53
+    &:hover
+        color: #c12
+
+hr
+    @media screen
+        background: #99b
+        border: #99b 0.2rem solid
+        border-radius: 2rem
+        margin: 1.55rem auto
+    @media print
+        display: none
+
+pre
+    font-size: 90%
+    padding: 1rem
+    border-radius: 0.5rem
+    background: #ecece4
+    page-break-inside: avoid
+    font-family: $mono_font_family
+tt
+    font-family: $mono_font_family
+.reverse
+    padding: 0 0.2rem
+    font-family: $mono_font_family
+    background: #000
+    color: #fff
+    font-weight: bold
+
+body
+    counter-reset: figure
+
+.figure
+    text-align: center
+    color: #333
+    display: block
+    page-break-before: avoid
+    &::before
+        counter-increment: figure
+        content: "Figure " counter(figure) ": "
+
+.edmark
+    margin-left: 0.275rem
+    font-size: 0.7rem
+    vertical-align: 0.125rem
+
+#wiptag, #ietftag
+    @media print
+        display: none
+    position: fixed
+    bottom: 1rem
+    right: 1rem
+    padding: 0.3rem 0.6rem
+    background: #d54
+    border-radius: 0.36rem
+    color: #fdfbfb
+    font-family: $mono_font_family
+    .detail
+        display: none
+    &:hover .detail, &:focus .detail
+        display: block
+        @media print
+            display: none
+        position: fixed
+        bottom: 1rem
+        @media only screen and (max-width: 60rem)
+            bottom: 3rem
+        right: 1rem
+        padding: 0.3rem 0.6rem
+        color: #222
+        border-radius: 0.36rem
+        background: rgba(250, 250, 250, 0.95)
+        text-align: center
+        font-family: $standard_font_family
+#wiptag::before
+    content: "WIP"
+#ietftag::before
+    content: "IETF"
+
+// irc colors
+.ircf-0
+    color: #ffffff
+.ircf-1
+    color: #000000
+.ircf-2
+    color: #00007f
+.ircf-3
+    color: #009300
+.ircf-4
+    color: #ff0000
+.ircf-5
+    color: #7f0000
+.ircf-6
+    color: #9c009c
+.ircf-7
+    color: #fc7f00
+.ircf-8
+    color: #ffff00
+.ircf-9
+    color: #00fc00
+.ircf-10
+    color: #009393
+.ircf-11
+    color: #00ffff
+.ircf-12
+    color: #0000fc
+.ircf-13
+    color: #ff00ff
+.ircf-14
+    color: #7f7f7f
+.ircf-15
+    color: #d2d2d2
+.ircf-99
+    color: #000000
+
+.ircb-0
+    background: #ffffff
+.ircb-1
+    background: #000000
+.ircb-2
+    background: #00007f
+.ircb-3
+    background: #009300
+.ircb-4
+    background: #ff0000
+.ircb-5
+    background: #7f0000
+.ircb-6
+    background: #9c009c
+.ircb-7
+    background: #fc7f00
+.ircb-8
+    background: #ffff00
+.ircb-9
+    background: #00fc00
+.ircb-10
+    background: #009393
+.ircb-11
+    background: #00ffff
+.ircb-12
+    background: #0000fc
+.ircb-13
+    background: #ff00ff
+.ircb-14
+    background: #7f7f7f
+.ircb-15
+    background: #d2d2d2
+.ircb-99
+    background: #ffffff
+
+.ircb
+    font-weight: bold
+.irci
+    font-style: italic
+
+@media print
+    #printable-toc
+        display: block !important
+        page-break-before: always
+        &::before
+            content: "Table of Contents"
+            color: #3e3e4e
+            margin-bottom: 1rem
+            font-size: 2rem
+            font-weight: bold
+        > ul
+            padding: 0.5rem 0
+            counter-reset: toc-lvl-1
+            > li
+                &::before
+                    content: counter(toc-lvl-1)
+                    counter-increment: toc-lvl-1
+                    padding-right: 1rem
+                > ul
+                    counter-reset: toc-lvl-2
+                    > li
+                        &::before
+                            content: counter(toc-lvl-1) "." counter(toc-lvl-2)
+                            counter-increment: toc-lvl-2
+                            padding-right: 1rem
+                        > ul
+                            counter-reset: toc-lvl-3
+                            > li
+                                &::before
+                                    content: counter(toc-lvl-1) "." counter(toc-lvl-2) "." counter(toc-lvl-3)
+                                    counter-increment: toc-lvl-3
+                                    padding-right: 1rem
+                &.parent-appendixes
+                    &.parent-appendixes-1
+                        counter-reset: toc-appendixes
+                    &::before
+                        content: "Appendix " counter(toc-appendixes, upper-alpha) ". "
+                        counter-increment: toc-appendixes
+                        padding: 0
+                    > ul, ol, li
+                        display: none
+        ul, ol
+            margin: 0
+            list-style-type: none
+        li
+            margin: 0
+            padding-top: 0.25rem
+
+    #spec
+        &::before
+            counter-reset: h-lvl-1
+        h1
+            counter-increment: h-lvl-1
+            counter-reset: h-lvl-2 h-lvl-3
+            &::before
+                content: counter(h-lvl-1)
+                padding-right: 1.2rem
+                font-size: 1.25rem
+        h2
+            counter-increment: h-lvl-2
+            counter-reset: h-lvl-3
+            &::before
+                content: counter(h-lvl-1) "." counter(h-lvl-2)
+                padding-right: 1rem
+                font-size: 1.25rem
+        h3
+            counter-increment: h-lvl-3
+            &::before
+                content: counter(h-lvl-1) "." counter(h-lvl-2) "." counter(h-lvl-3)
+                padding-right: 1rem
+                font-size: 1.25rem
+        .toc-id-acknowledgements
+            &::before
+                content: ""
+                padding-right: 0
+        #appendixes
+            &::before
+                counter-reset: a-lvl-1
+            h1
+                counter-increment: a-lvl-1
+                &::before
+                    content: "Appendix " counter(a-lvl-1, upper-alpha) ". "
+                    font-size: inherit
+                    padding-right: 0
+            h3
+                &::before
+                    content: none
+                    padding-right: 0
+        #acknowledgements
+            &::before
+                content: ""
+                padding-right: 0

@@ -1,0 +1,7 @@
+repository: ircdocs/wooooms
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+gems:
+  - jekyll-sitemap
