@@ -24,7 +24,7 @@ This page lists the common IRC specs out there, and roughly catalogues the outda
 
 <h3><a href="https://tools.ietf.org/html/rfc2810#section-2.2">2.2 - Clients</a></h3>
 
-This section reads:
+The spec reads:
 
       User clients are generally programs providing a text based
       interface that is used to communicate interactively via IRC.  This
@@ -44,7 +44,7 @@ While in practice, both 'bots' and 'pseudo-servers' that create fake clients are
 
 <h3><a href="https://tools.ietf.org/html/rfc2810#section-3">3 - Architecture</a></h3>
 
-This section reads:
+The spec reads:
 
       The IRC protocol provides no mean for two clients to directly
       communicate.  All communication between clients is relayed by the
@@ -54,7 +54,7 @@ While this is accurate (the IRC protocol _itself_ doesn't provide this), the [DC
 
 <h3><a href="https://tools.ietf.org/html/rfc2810#section-6.1">6.1 - Scalability</a></h3>
 
-This section reads:
+The spec reads:
 
       It is widely recognized that this protocol does not scale
       sufficiently well when used in a large arena.  The main problem comes
@@ -78,7 +78,7 @@ The spec reads:
       identified as the "channel creator".  Upon creation of the channel,
       this user is also given channel operator status.
 
-These days, this 'channel creator' role has generally been replaced with a 'founder' role using the channel member prefix `~` (which is only used when the server supports user acount registration and channel ownership via ChanServ or similar).
+These days, this 'channel creator' role has generally been replaced with a 'channel founder' role using the channel member prefix `'~'` (which is only used when the server supports user account registration and channel ownership via ChanServ or similar).
 
 <h3><a href="https://tools.ietf.org/html/rfc2811#section-3">3. - Channel lifetime</a></h3>
 
@@ -88,9 +88,9 @@ The spec reads:
       groups of channels: standard channels which prefix is either '&', '#'
       or '+', and "safe channels" which prefix is '!'.
 
-'Safe channels' aren't... widely implemented these days. You can still find a couple networks out there that support them, but they're very few and far between. It's more appropriate to say that there are two groups of channels in regards to lifetimes:
+'Safe channels' aren't implemented these days. You can still find a couple networks out there that support them, but they're very few and far between. It's more appropriate to say that there are two groups of channels in regards to lifetimes:
 
-- Unregistered channels act as described in the **Standard Channels** (3.1) section, with the caveat listed below.
+- Unregistered channels act as described in the **Standard Channels** (3.1) section, with the caveats listed below.
 - Registered channels have long lifetimes, lasting longer than the life of the clients connected to it and usually longer than the life of the ircd itself (around 90-120 days is relatively common).
 
 See how ChanServ works for a better representation of channel lifetimes than I'm giving here.
@@ -232,9 +232,29 @@ Servers only really look at a hashed signature (fingerprint) of the certificate,
 ---
 
 
+<h2><a href="https://tools.ietf.org/html/draft-hardy-irc-isupport-00">Hardy's IRC RPL_ISUPPORT Numeric Definition Internet-Draft</a></h2>
+
+On the whole, this specification is pretty much accurate and works well. There are a few tokens specified here which aren't well-used these days, and some that are missing but should be here. The Modern docs has a slightly-updated description of the RPL_ISUPPORT numeric in these sections: [1](https://modern.ircdocs.horse/#connection-registration), [2](https://modern.ircdocs.horse/#feature-advertisement), [3](https://modern.ircdocs.horse/#rplisupport-005), and [4](https://modern.ircdocs.horse/#rplisupport-005).
+
+<h3><a href="https://tools.ietf.org/html/draft-hardy-irc-isupport-00#section-3">3 - The RPL_ISUPPORT numeric</a></h3>
+
+The spec reads:
+
+      counter this, a server MAY issue multiple RPL_ISUPPORT numerics.  A
+      server MUST issue the RPL_ISUPPORT numeric after client registration
+      has completed.  It MUST be issued after the RPL_WELCOME (XXX -
+      reference?) welcome and MUST be issued before any further commands
+      from the client are processed.
+
+This is accurate, but a little imprecise. To be specific, the `001-004` numerics are the first numerics sent after connection registration has completed, followed by one or more `RPL_ISUPPORT (005)` numerics. The `RPL_ISUPPORT` numerics MUST come before either the `RPL_ENDOFMOTD` / `ERR_NOMOTD` numerics.
+
+
+---
+
+
 <h2><a href="http://www.irchelp.org/protocol/ctcpspec.html">The Client-To-Client Protocol (CTCP)</a></h2>
 
-My advice on this specification can be roughly summed up as _"go read [this Internet-Draft](https://tools.ietf.org/html/draft-oakley-irc-ctcp-01) that grawity and I wrote up instead"_. Still, here are the sections of the original spec that have issues today.
+My advice on this specification can roughly be summed up as _"go read [this Internet-Draft](https://tools.ietf.org/html/draft-oakley-irc-ctcp-01) that grawity and I wrote up instead"_. Still, here are the sections of the original spec that have issues today.
 
 ### LOW LEVEL QUOTING
 
