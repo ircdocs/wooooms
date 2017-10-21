@@ -14,13 +14,55 @@ This page lists the common IRC specs out there, and roughly catalogues the outda
 <!-- ---
 
 
-<h2><a href="https://tools.ietf.org/html/rfc1459">RFC 1459</a></h2>
+<h2><a href="https://tools.ietf.org/html/rfc1459">RFC 1459</a></h2> -->
 
 
 ---
 
 
-<h2><a href="https://tools.ietf.org/html/rfc2810">RFC 2810</a></h2> -->
+<h2><a href="https://tools.ietf.org/html/rfc2810">RFC 2810</a></h2>
+
+<h3><a href="https://tools.ietf.org/html/rfc2810#section-2.2">2.2 - Clients</a></h3>
+
+This section reads:
+
+      User clients are generally programs providing a text based
+      interface that is used to communicate interactively via IRC.  This
+      particular type of clients is often referred as "users".
+
+      ...
+
+      Unlike users, service clients are not intended to be used manually
+      nor for talking.  They have a more limited access to the chat
+      functions of the protocol, while optionally having access to more
+      private data from the servers.
+
+While in practice, both 'bots' and 'pseudo-servers' that create fake clients are used with IRC, the user-clients vs service-clients split described in this section is not accurate. It would be more accurate to frame the different clients as such:
+
+- True Clients: These are clients that connect to servers using the IRC client protocol. They can be controlled by a human user, a bot program, or some combination of the two.
+- Fake Clients: These are clients that are introduced through the S2S protocol, but are not actual externally-connected clients. Some examples of this are the NickServ and ChanServ clients common on networks.
+
+<h3><a href="https://tools.ietf.org/html/rfc2810#section-3">3 - Architecture</a></h3>
+
+This section reads:
+
+      The IRC protocol provides no mean for two clients to directly
+      communicate.  All communication between clients is relayed by the
+      server(s).
+
+While this is accurate (the IRC protocol _itself_ doesn't provide this), the [DCC protocol](https://modern.ircdocs.horse/dcc.html) does provide this.
+
+<h3><a href="https://tools.ietf.org/html/rfc2810#section-6.1">6.1 - Scalability</a></h3>
+
+This section reads:
+
+      It is widely recognized that this protocol does not scale
+      sufficiently well when used in a large arena.  The main problem comes
+      from the requirement that all servers know about all other servers,
+      clients and channels and that information regarding them be updated
+      as soon as it changes.
+
+While mostly accurate, some S2S protocols only share a limited amount of information with other servers – for instance, not sharing detailed channel information with a server unless there's a client connected to that channel on the server. These sort of workarounds try to help address this issue.
 
 
 ---
@@ -79,11 +121,11 @@ Channel delay has largely been replaced with systems that rely on timestamps to 
 
 <h3><a href="https://tools.ietf.org/html/rfc2811#section-4">4 - Channel Modes</a></h3>
 
-The spec has a list of channel modes. For an updated list of modes that are commonly-implemented across servers, I'd recommend seeing [this page instead](https://modern.ircdocs.horse/#channel-modes).
+This section has a list of channel modes. For an updated list of modes that are commonly-implemented across servers, I'd recommend seeing [this page instead](https://modern.ircdocs.horse/#channel-modes).
 
 <h3><a href="https://tools.ietf.org/html/rfc2811#section-4.1">4.1 - Member Status</a></h3>
 
-The spec lists a series of membership prefixes and levels. The 'channel creator' status has largely been replaced with the ones listed on [this page](https://modern.ircdocs.horse/#channel-membership-prefixes), which I'd recommend consulting instead.
+This section lists a series of membership prefixes and levels. The 'channel creator' status has largely been replaced with the ones listed on [this page](https://modern.ircdocs.horse/#channel-membership-prefixes), which I'd recommend consulting instead.
 
 <h3><a href="https://tools.ietf.org/html/rfc2811#section-4.2">4.2 - Channel Flags</a></h3>
 
