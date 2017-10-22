@@ -11,10 +11,178 @@ So, uh. IRC specifications. There are a _damn lot_ of them. And a lot of those a
 This page lists the common IRC specs out there, and roughly catalogues the outdated or misleading sections of them.
 
 
-<!-- ---
+---
 
 
-<h2><a href="https://tools.ietf.org/html/rfc1459">RFC 1459</a></h2> -->
+<h2><a href="https://tools.ietf.org/html/rfc1459">RFC 1459</a></h2>
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-1.2">1.2 - Clients</a></h3>
+
+The spec reads:
+
+      server.  Each client is distinguished from other clients by a unique
+      nickname having a maximum length of nine (9) characters.  See the
+
+Nicks are no longer limited to nine characters. See the [`NICKLEN`](https://modern.ircdocs.horse/#nicklen-parameter) RPL_ISUPPORT token for the actual maximum nick length on the network.
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-1.3">1.3 - Channels</a></h3>
+
+The spec reads:
+
+      Channels names are strings (beginning with a '&' or '#' character) of
+      length up to 200 characters.  Apart from the the requirement that the
+      first character being either '&' or '#'; the only restriction on a
+
+Channels can start with any character defined by the [`CHANTYPES`](https://modern.ircdocs.horse/#chantypes-parameter) RPL_ISUPPORT token, and the maximum channel name length is defined by the [`CHANNELLEN`](https://modern.ircdocs.horse/#channellen-parameter) token.
+
+The spec reads:
+
+      think is in each channel and the mode of that channel.  If the
+      channel exists on both sides, the JOINs and MODEs are interpreted in
+      an inclusive manner so that both sides of the new connection will
+      agree about which clients are in the channel and what modes the
+      channel has.
+
+Modes aren't strictly interpreted in an inclusive manner. Commonly, server-to-server (S2S) protocols use some sort of timestamping function to ensure clients can't exploit netsplits to incorrectly give themselves permissions. Servers should agree about exactly what modes the channel has, in any case.
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-1.3.1">1.3.1 - Channel Operators</a></h3>
+
+These days there are also different levels of channel moderator, including 'halfops' (half operators), 'protected ops', and the 'founder' rank. These moderation levels have varying privileges and can execute, and not execute, various channel management commands based on what the server defines.
+
+These channel moderators also have different prefixes, defined by the [`PREFIX`](https://modern.ircdocs.horse/#prefix-parameter) RPL_ISUPPORT token.
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-2.1">2.1 - The IRC Specification Overview</a></h3>
+
+The spec reads:
+
+      The protocol as described herein is for use both with server to
+      server and client to server connections.  There are, however, more
+
+This protocol is only used for client connections. Server protocols these days are varied and while some (such as [TS6](https://github.com/grawity/irc-docs/blob/master/server/ts6.txt) and [P10](https://github.com/grawity/irc-docs/blob/master/server/p10-nefarious2.txt)) are based on this original S2S protocol, others may not be.
+
+For the best guide on a server's S2S protocol, look at the documentation+code for the specific IRC server you're using.
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-2.2">2.2 - Character codes</a></h3>
+
+The spec reads:
+
+      No specific character set is specified.
+
+While this is accurate, UTF-8 has become the generally-accepted standard encoding for sending messages on IRC. When decoding, using a combination of UTF-8 and [Latin-1/ISO-8859-1(5)/CP1252](https://en.wikipedia.org/wiki/Windows-1252) is best. See [this page](https://modern.ircdocs.horse/#character-encodings) for further discussion on character sets with the client protocol.
+
+The spec reads:
+
+      Because of IRC's scandanavian origin, the characters {}| are
+      considered to be the lower case equivalents of the characters []\,
+      respectively. This is a critical issue when determining the
+      equivalence of two nicknames.
+
+This is true for servers following `rfc1459` casefolding. However, servers may not do this. To discover the specific casefolding rules the server has in place, see the [`CASEMAPPING`](https://modern.ircdocs.horse/#casemapping-parameter) RPL_ISUPPORT token.
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-2.3.1">2.3.1 - Message format in 'pseudo' BNF</a></h3>
+
+See the IRCv3 [Message Tags](http://ircv3.net/specs/core/message-tags-3.2.html) specification for info regarding updates to this.
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-4.1">4.1 - Connection Registration</a></h3>
+
+The spec reads:
+
+      A "PASS" command is not required for either client or server
+      connection to be registered, but it must precede the server message
+      or the latter of the NICK/USER combination.  It is strongly
+      recommended that all server connections have a password in order to
+      give some level of security to the actual connections.  The
+      recommended order for a client to register is as follows:
+
+            1. Pass message
+            2. Nick message
+            3. User message
+
+There are a few more commands that can be used during connection registration, and some specific numerics that are sent once registration is completed. See [this page](https://modern.ircdocs.horse/#connection-registration) for a more accurate overview of connection registration.
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-4.1.3">4.1.3 - User message</a></h3>
+
+The spec reads:
+
+         Command: USER
+      Parameters: <username> <hostname> <servername> <realname>
+
+      ...
+
+      Note that hostname and servername are normally ignored by the IRC
+      server when the USER command comes from a directly connected client
+      (for security reasons), but they are used in server to server
+      communication.  This means that a NICK must always be sent to a
+
+This is correct, and I point it out because client and server authors often mistakenly believe the `<hostname>` and `<servername>` parameters for parameters that they should actually send real data for or parse. Particularly because of differences between RFC 1459 and RFC 2812, clients should just send `"0 *"` for the `<hostname>` and `<servername>` parameters.
+
+Many servers also prefix usernames given to them by the client with a `'~'` character, to note that it is user-supplied rather than having been retrieved from an identity server. See [this page](https://modern.ircdocs.horse/#user-message) for more discussion on this.
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-4.1.5">4.1.5 - Oper message</a></h3>
+
+The specific failure cases for this command, and what to do when they're encountered, are expanded on [here](https://modern.ircdocs.horse/#oper-message).
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-4.1.6">4.1.6 - Quit message</a></h3>
+
+These days, servers prepend `"Quit: "` to user-provided quit messages to separate them from other protocol or server issues. In addition, quits created due to netsplits often don't contain the actual names of servers and use the fake server names `"*.net *.split"`. This is expanded on [here](https://modern.ircdocs.horse/#quit-message).
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-4.2">4.2 - Channel operations</a></h3>
+
+The spec reads:
+
+      ultimately clash.  It is also required that servers keep a nickname
+      history to ensure that wherever a <nick> parameter is given, the
+      server check its history in case it has recently been changed.
+
+These days, S2S protocols generally use a timestamp-based approach to prevent these issues from happening, rather than nick-delay solutions. Because of this, the recently-changed-nicks history isn't required.
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-4.2.1">4.2.1 - Join message</a></h3>
+
+In addition to the elements affecting this command listed here, there are now [ban](https://modern.ircdocs.horse/#ban-exemption-channel-mode) and [invite exceptions](https://modern.ircdocs.horse/#invite-exemption-channel-mode), the channel limit noted by [`CHANLIMIT`](https://modern.ircdocs.horse/#chanlimit-parameter), and the special argument of `'0'` which some servers accept. See a more accurate description of this command [here](https://modern.ircdocs.horse/#join-message).
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-4.2.2">4.2.2 - Part message</a></h3>
+
+See [here](https://modern.ircdocs.horse/#part-message) for a more in-depth explanation of this command, as well as exactly how it's relayed to other clients.
+
+<h3><a href="https://tools.ietf.org/html/rfc1459#section-4.2.3">4.2.3 - Mode message</a></h3>
+
+The spec reads:
+
+      The MODE command is a dual-purpose command in IRC.  It allows both
+      usernames and channels to have their mode changed.  The rationale for
+      this choice is that one day nicknames will be obsolete and the
+      equivalent property will be the channel.
+
+I haven't been able to find any reasonable meaning in the phrase _"one day nicknames will be obsolete and the equivalent property will be the channel"_. It means nothing, and nicknames are just as relevant as they've always been.
+
+In addition, the described message format for both channel and user modes is incorrect (`'+'` and `'-'` are now allowed at any point in a modestring).
+
+For a wildly more accurate definition of this command, see [here](https://modern.ircdocs.horse/#mode-message).
+
+<h4><a href="https://tools.ietf.org/html/rfc1459#section-4.2.3.1">4.2.3.1 - Channel modes</a></h4>
+
+As noted above, the message format is incorrect as `'+'` and `'-'` are now allowed anywhere in a modestring.
+
+The specific list of channel modes here is outdated – 'private' is no longer standard, and there are a few more standard modes out there. See [here](https://modern.ircdocs.horse/#channel-modes) for an updated list.
+
+There are now several 'types' of channel modes which are defined with the [`CHANMODES`](https://modern.ircdocs.horse/#chanmodes-parameter) RPL_ISUPPORT token. See [here](https://modern.ircdocs.horse/#mode-message) for further discussion on this and how it's implemented today.
+
+The spec also reads:
+
+      When using the 'o' and 'b' options, a restriction on a total of three
+      per mode command has been imposed.  That is, any combination of 'o'
+      and
+
+In addition to the mistaken cut-off text here, these restrictions are now defined by the [`MODES`](https://modern.ircdocs.horse/#modes-parameter) RPL_ISUPPORT parameter.
+
+<h4><a href="https://tools.ietf.org/html/rfc1459#section-4.2.3.2">4.2.3.2 - User modes</a></h4>
+
+As noted above, the message format is incorrect as `'+'` and `'-'` are now allowed anywhere in a modestring.
+
+The list of user modes here is outdated, and there are some other standard ones. See [here](https://modern.ircdocs.horse/#user-modes) for a slightly-updated list.
+
+
+<!-- TODO(dan): Finish RFC 1459 section -->
 
 
 ---
