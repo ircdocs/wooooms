@@ -181,6 +181,15 @@ As noted above, the message format is incorrect as `'+'` and `'-'` are now allow
 
 The list of user modes here is outdated, and there are some other standard ones. See [here](https://modern.ircdocs.horse/#user-modes) for a slightly-updated list.
 
+<h3><a href="https://datatracker.ietf.org/doc/html/rfc1459#section-4.2.7">4.2.4 - Invite message</a></h3>
+
+The spec reads:
+
+    There is no requirement that the
+    channel the target user is being invited to must exist or be a valid
+    channel.
+
+In practice, all server implementations return `ERR_NOSUCHNICK` when the channel does not exist.
 
 <!-- TODO(dan): Finish RFC 1459 section -->
 
