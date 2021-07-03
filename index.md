@@ -155,13 +155,9 @@ The spec reads:
 
 I haven't been able to find any reasonable meaning in the phrase _"one day nicknames will be obsolete and the equivalent property will be the channel"_. It means nothing, and nicknames are just as relevant as they've always been.
 
-In addition, the described message format for both channel and user modes is incorrect (`'+'` and `'-'` are now allowed at any point in a modestring).
-
 For a wildly more accurate definition of this command, see [here](https://modern.ircdocs.horse/#mode-message).
 
 <h4><a href="https://tools.ietf.org/html/rfc1459#section-4.2.3.1">4.2.3.1 - Channel modes</a></h4>
-
-As noted above, the message format is incorrect as `'+'` and `'-'` are now allowed anywhere in a modestring.
 
 The specific list of channel modes here is outdated – 'private' is no longer standard, and there are a few more standard modes out there. See [here](https://modern.ircdocs.horse/#channel-modes) for an updated list.
 
@@ -176,8 +172,6 @@ The spec also reads:
 In addition to the mistaken cut-off text here, these restrictions are now defined by the [`MODES`](https://modern.ircdocs.horse/#modes-parameter) RPL_ISUPPORT parameter.
 
 <h4><a href="https://tools.ietf.org/html/rfc1459#section-4.2.3.2">4.2.3.2 - User modes</a></h4>
-
-As noted above, the message format is incorrect as `'+'` and `'-'` are now allowed anywhere in a modestring.
 
 The list of user modes here is outdated, and there are some other standard ones. See [here](https://modern.ircdocs.horse/#user-modes) for a slightly-updated list.
 
